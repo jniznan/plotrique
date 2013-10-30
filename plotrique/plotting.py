@@ -114,7 +114,7 @@ class Plotter(object):
             list_of_label_series = lst
         for color, label, series in zip(colors,
                                         *zip(*list_of_label_series))[::-1]:
-            self.plot(series, label, color)
+            self.plot(series=series, label=label, color=color)
 
     def line(self, x, label=None, y='bottom', color='grey', ax=None, **kwargs):
         '''
