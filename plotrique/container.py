@@ -101,8 +101,8 @@ class Container(object):
 
     def _plot(self, series, labels, colors, title, lines=None, today=None,
               stacked=False, loc=0, lines_y='bottom', today_y='bottom',
-              stamp=False, **kwargs):
-        p = Plotter(fill=stacked, stamp=stamp)
+              **kwargs):
+        p = Plotter(fill=stacked, **kwargs)
         p.plots(zip(labels, series), stacked=stacked, colors=colors)
         self._lines(p, series, lines, lines_y, today, today_y)
         plt.legend(loc=loc)
@@ -110,8 +110,8 @@ class Container(object):
 
     def _diffplot(self, series, diffs, labels, colors, title, lines=None,
                   today=None, invert=False, loc=0, lines_y='bottom',
-                  today_y='bottom', stamp=False, **kwargs):
-        p = DiffPlotter(title=title, stamp=stamp)
+                  today_y='bottom', **kwargs):
+        p = DiffPlotter(title=title, **kwargs)
         if invert:
             series, diffs = diffs, series
         for s, d, l in zip(series, diffs, labels):

@@ -26,10 +26,20 @@ CNAMES = {'blue': 0, 'b': 0,
           'cyan': 9}
 
 
+def timestamp_figure(figure, stamp=True):
+    # drop seconds:
+    t = str(datetime.utcnow()).split('.')[0][:-3]
+    if isinstance(stamp, basestring):
+        t = '%s %s' % (stamp, t)
+    figure.text(0.95, 0.05, t, fontsize=12, color='gray',
+                ha='right', va='bottom', alpha=0.5)
+
+
 class Plotter(object):
     ''' Convenince plotting wrapper '''
 
-    def __init__(self, figsize=(10, 6), fill=True, stamp=False):
+    def __init__(self, figsize=(10, 6), fill=True, title='', stamp=True,
+                 **kwargs):
         '''
         :param (int, int) figsize:
             The size of the figure.
@@ -44,12 +54,10 @@ class Plotter(object):
         self.counter = 0
         self.fill = fill
         self.fig = plt.figure(figsize=figsize)
+        if title:
+            plt.title(title)
         if stamp:
-            t = str(datetime.utcnow()).split('.')[0]
-            if isinstance(stamp, basestring):
-                t = '%s %s' % (stamp, t)
-            self.fig.text(0.95, 0.05, t, fontsize=12, color='gray',
-                          ha='right', va='bottom', alpha=0.5)
+            timestamp_figure(self.fig, stamp)
 
     def get_color(self, color):
         '''
@@ -162,9 +170,13 @@ class Plotter(object):
         for l, x in lines_dict.items():
             self.line(x, l, y, color, **kwargs)
 
+    def legend(self, **kwargs):
+        plt.legend(**kwargs)
+
 
 class DiffPlotter(Plotter):
-    def __init__(self, figsize=(10, 7), fill=False, title='', autodiffs=True):
+    def __init__(self, figsize=(10, 7), fill=False, title='', autodiffs=True,
+                 **kwargs):
         '''
         :param (int, int) figsize:
             The size of the figure.
@@ -176,7 +188,8 @@ class DiffPlotter(Plotter):
             Indicates whether the diffs should be computed automatically if
             they are not specified.
         '''
-        super(DiffPlotter, self).__init__(figsize=figsize, fill=fill)
+        super(DiffPlotter, self).__init__(figsize=figsize, fill=fill,
+                                          **kwargs)
         self.autodiffs = autodiffs
         self.ax1 = plt.subplot2grid((4, 1), (0, 0), rowspan=3)
         plt.title(title)
